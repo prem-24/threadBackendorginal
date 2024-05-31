@@ -1,4 +1,7 @@
-const { Post } = require("../models/Post");
+const { Post, upload } = require("../models/Post");
+
+
+
 const { User } = require("../models/User");
 exports.getAllPosts = async (req, res) => {
   try {
@@ -45,24 +48,49 @@ exports.getPostByUserId = async (req, res) => {
   }
 };
 
-exports.createPost = async (req, res) => {
+// exports.createPost = async (req, res) => {
 
-  const data = req.body;
-  // console.log(data);
-  const newPost = new Post({
-    content: data.content,
-    imageUrl: data.imageUrl,
-    author: data.author,
-    authorName: data.authorName,
-    icon:data.icon
-  });
-  try {
-    const savedPost = await newPost.save();
-    res.status(201).json(savedPost);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+//   const data = req.body;
+//   // console.log(data);
+//   const newPost = new Post({
+//     content: data.content,
+//     imageUrl: data.imageUrl,
+//     author: data.author,
+//     authorName: data.authorName,
+//     icon:data.icon
+//   });
+//   try {
+//     const savedPost = await newPost.save();
+//     res.status(201).json(savedPost);
+//   } catch (err) {
+//     res.status(400).json({ message: err.message });
+//   }
+// };
+
+
+exports.createPost = [
+  upload.single('image'), // Use Multer middleware to handle single file upload
+  async (req, res) => {
+    try {
+      const data = req.body;
+      const imageUrl = req.file ? req.file.path : null; // Get the file path from Multer
+      
+      const newPost = new Post({
+        content: data.content,
+        imageUrl: imageUrl, // Store the file path in MongoDB
+        author: data.author,
+        authorName: data.authorName,
+        icon: data.icon,
+      });
+
+      const savedPost = await newPost.save();
+      res.status(201).json(savedPost);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   }
-};
+];
+
 
 exports.updatePost = async (req, res) => {
   try {
