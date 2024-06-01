@@ -91,7 +91,7 @@ const UsersData = [
     content: `"Marvel at the grandeur of the Brihadeeswarar Temple, where history and architecture unite. 🕉️ #Thanjavur #IncredibleIndia"`,
     icon: "/uploads/user1.svg",
     authorName: "rajesh",
-    imageUrl: "/uploads/pic9.png",
+    imageUrl: "/uploads/pic9.svg",
     author: "60ac802a96126a1f442e3d2d", // Valid ObjectId reference to a user
     createdAt: new Date(),
     updatedAt: new Date(),
